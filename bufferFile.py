@@ -5,106 +5,96 @@ from util import strip_path
 
 
 class Queue:
-    def __init__(self, Maxlen=10):
-        self._content = []
-        self._current = 0
-        self._size = Maxlen
-        if self._size < self._current:
-            self._size = self._current
+    def __init__(self, M=22):
+        self.file_content = []
+        self.file_current = 0
+        self.S = M
+        if self.S < self.file_current:
+            self.S = self.file_current
 
     def __del__(self):
-        del self._content
+        del self.file_content
 
     def isFull(self):
-        return self._current == self._size
+        return self.file_current == self.S
 
     def isEmpty(self):
-        return not self._content
+        return not self.file_content
 
     def __len__(self):
-        return self._current
+        return self.file_current
 
     def put(self, x):
-        if self._current < self._size:
-            self._content.append(x)
-            self._current = self._current + 1
+        if self.file_current < self._size:
+            self.file_content.append(x)
+            self.file_current = self.file_current + 1
         else:
-            print('队列已满，无法入队')
+            print('The queue is full and cannot be enqueued')
 
     def get(self):
-        if self._content:
+        if self.file_content:
             self._current = self._current - 1
-            return self._content.pop(0)
+            return self.file_content.pop(0)
         else:
-            print('队列为空，无法出队')
+            print('The queue is empty and cannot be dequeued')
 
 
-def write_q(file_name, q):
-    with open(file_name, mode='wb') as file:
+def write_q(filecode, q):
+    with open(filecode, mode='wb') as file:
         q = pickle.dumps(q)
         file.write(q)
         file.close()
 
 
-def create_file(file_name, size):
-    file_name = strip_path(file_name)
-    if not os.path.exists(file_name):
-        q = Queue(size)
-        write_q(file_name, q)
+def create_file(filecode, S):
+    filecode = strip_path(filecode)
+    if not os.path.exists(filecode):
+        q = Queue(S)
+        write_q(filecode, q)
         return True
     else:
-        print(file_name + ' file already exists')
+        print(filecode + ' file already exists')
         return False
 
-
-# file_name = '/home/test'
-# createDir(file_name)
-
-def delete_file(file_name):
-    file_name = strip_path(file_name)
-    is_exists = os.path.exists(file_name)
-    if not is_exists:
-        print(file_name + ' file does not exist')
+def delete_file(filecode):
+    filecode = strip_path(filecode)
+    file_exists = os.path.exists(filecode)
+    if not file_exists:
+        print(filecode + ' file does not exist')
         return False
     else:
-        os.remove(file_name)
+        os.remove(filecode)
     return True
 
 
-# deleteDir(file_name)
-
-def move_file(old_file_name, new_file_name):
-    old_file_name = strip_path(old_file_name)
-    if not os.path.exists(old_file_name):
-        print(old_file_name + ' old file does not exist')
+def move_file(old_filecode , new_filecode):
+    old_filecode = strip_path(old_filecode)
+    if not os.path.exists(old_filecode):
+        print(old_filecode + ' old ffilecode does not exist')
         return False
     else:
-        shutil.move(old_file_name, new_file_name)
+        shutil.move(old_filecode, new_filecode)
     return True
 
 
-def push_element(file_name, element):
-    with open(file_name, mode='rb') as file:
+def push_element(filecode, element):
+    with open(filecode, mode='rb') as file:
         q = pickle.load(file)
         file.close()
     if q.isFull():
         return False
     else:
         q.put(element)
-        write_q(file_name, q)
+        write_q(filecode, q)
 
 
-def consume_element(file_name):
-    with open(file_name, mode='rb') as file:
+def consume_element(filecode):
+    with open(filecode, mode='rb') as file:
         q = pickle.load(file)
         file.close()
     if q.isEmpty():
         return
     else:
         element = q.get()
-        write_q(file_name, q)
+        write_q(filecode, q)
         return element
-
-# read_file('/Users/cp/Documents/pythontest/a.txt')
-
-# write_file('/Users/cp/Documents/pythontest/a.txt','hello world')
