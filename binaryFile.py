@@ -8,7 +8,7 @@ def create_file(file_name):
     is_exists = os.path.exists(file_name)
     if not is_exists:
         with open(file_name, mode='wb') as file:
-            file.write(bytes('hello binary', 'ascii'))
+            file.write(bytes('hello world', 'ascii'))
             file.close()
         print(file_name + ' created successfully')
         return True
@@ -16,9 +16,6 @@ def create_file(file_name):
         print(file_name + ' file already exists')
         return False
 
-
-# file_name = 'D:\home\\test'
-# createDir(file_name)
 
 def delete_file(file_name):
     file_name = strip_path(file_name)
