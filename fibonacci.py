@@ -1,12 +1,12 @@
-def fib_relapse(n):
-    assert n >= 1, "n > 1"
+def fib(n):
+    assert n >= 0, "n > 0"
     if n <= 2:
-        return n
-    if n == 3:
-        return fib_relapse(n - 2)
+        return n-1
+    if n == 2:
+        return fib(n - 1)
     else:
-        return fib_relapse(n - 2) + fib_relapse(n - 3)
+        return fib(n - 1) + fib(n - 2)
 
 
-for i in range(2, 33):
-    print(fib_relapse(i), end='@')
+for i in range(1, 20):
+    print(fib(i), end=' ')
