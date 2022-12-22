@@ -1,60 +1,72 @@
 import os
 import shutil
 
-from util import strip_path
+from assignment1.util import strip_path
 
 
-def create_dictionary(dictionary_path):
-    dictionary_path = strip_path(dictionary_path)
-    ifexist = os.path.exists(dictionary_path)
-    if not ifexist:
-        os.makedirs(dictionary_path)
-        print(dictionary_path + ' dictionary_path created successfully')
-        return True
+def create_dir(dir_path):
+    dir_path = strip_path(dir_path)
+    is_exist = os.path.exists(dir_path)
+    if not is_exist:
+        os.makedirs(dir_path)
+        print(dir_path + ' created successfully')
+        return "success"
     else:
-        print(dictionary_path + ' dictionary_path  already exists')
-        return False
+        print(dir_path + ' directory already exists')
+        return "fail"
 
 
-def delete_dictionary(dictionary_path):
-    dictionary_path = strip_path(dictionary_path)
-    ifexist = os.path.exists(dictionary_path)
-    if not ifexist:
-        print(dictionary_path + ' dictionary_path does not exist')
-        return False
-    for name in os.listdir(dictionary_path):
-        file = os.path.join(dictionary_path, name)
+# dir_path = '/home/test'
+# create_dir(dir_path)
+
+def delete_dir(dir_path):
+    dir_path = strip_path(dir_path)
+    is_exist = os.path.exists(dir_path)
+    if not is_exist:
+        print(dir_path + ' directory does not exist')
+        return "fail"
+    for name in os.listdir(dir_path):
+        file = os.path.join(dir_path, name)
         if not os.path.isfile(file) and os.path.isdir(file):
-            delete_dictionary(file)
+            delete_dir(file)
         else:
             os.remove(file)
-    os.rmdir(dictionary_path)
-    return True
+    os.rmdir(dir_path)
+    return "success"
 
 
-def print_list(dictionary_path):
-    dictionary_path = strip_path(dictionary_path)
-    ifexist = os.path.exists(dictionary_path)
-    if not ifexist:
-        print(dictionary_path + ' dictionary_path does not exist')
-        return False
-    for name in os.listdir(dictionary_path):
-        file = os.path.join(dictionary_path, name)
+# delete_dir(dir_path)
+
+def get_list_name(dir_path):
+    dir_path = strip_path(dir_path)
+    is_exist = os.path.exists(dir_path)
+    if not is_exist:
+        return dir_path + ' directory does not exist'
+    return os.listdir(dir_path)
+
+def print_list(dir_path):
+    dir_path = strip_path(dir_path)
+    is_exist = os.path.exists(dir_path)
+    if not is_exist:
+        print(dir_path + ' directory does not exist')
+        return "fail"
+    for name in os.listdir(dir_path):
+        file = os.path.join(dir_path, name)
         if not os.path.isfile(file) and os.path.isdir(file):
             print_list(file)
         print(file)
-    return True
+    return "success"
 
 
-def get_file_list(dictionary_path):
-    dictionary_path = strip_path(dictionary_path)
-    ifexist = os.path.exists(dictionary_path)
-    if not ifexist:
-        print(dictionary_path + ' dictionary_path does not exist')
+def get_file_list(dir_path):
+    dir_path = strip_path(dir_path)
+    is_exist = os.path.exists(dir_path)
+    if not is_exist:
+        print(dir_path + ' directory does not exist')
         return []
     file_list = []
-    for name in os.listdir(dictionary_path):
-        file = os.path.join(dictionary_path, name)
+    for name in os.listdir(dir_path):
+        file = os.path.join(dir_path, name)
         if not os.path.isfile(file) and os.path.isdir(file):
             file_list.extend(get_file_list(file))
         else:
@@ -62,17 +74,17 @@ def get_file_list(dictionary_path):
     return file_list
 
 
-def move_content(o_dictionary_path, n_dictionary_path):
-    o_dictionary_path = strip_path(o_dictionary_path)
-    if not os.path.exists(o_dictionary_path):
-        print(o_dictionary_path + ' o_dictionary_path does not exist')
-        return False
+def move_content(old_dir_path, new_dir_path):
+    old_dir_path = strip_path(old_dir_path)
+    if not os.path.exists(old_dir_path):
+        print(old_dir_path + ' old directory does not exist')
+        return "fail"
     else:
-        n_dictionary_path = strip_path(n_dictionary_path)
-        if not os.path.exists(n_dictionary_path):
-            create_dictionary(n_dictionary_path)
-        for name in os.listdir(o_dictionary_path):
-            o_file = os.path.join(o_dictionary_path, name)
-            n_file = os.path.join(n_dictionary_path, name)
-            shutil.move(o_file, n_file)
-    return True
+        new_dir_path = strip_path(new_dir_path)
+        if not os.path.exists(new_dir_path):
+            create_dir(new_dir_path)
+        for name in os.listdir(old_dir_path):
+            old_file = os.path.join(old_dir_path, name)
+            new_file = os.path.join(new_dir_path, name)
+            shutil.move(old_file, new_file)
+    return "success"
